@@ -1,34 +1,23 @@
-/*
- * Copyright 2015 Orhan Obut
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * This software contains code derived from the following Android classes:
- * android.util.Log, android.text.TextUtils.
- */
 package com.orhanobut.logger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+
+import static com.orhanobut.logger.Logger.ASSERT;
+import static com.orhanobut.logger.Logger.DEBUG;
+import static com.orhanobut.logger.Logger.ERROR;
+import static com.orhanobut.logger.Logger.INFO;
+import static com.orhanobut.logger.Logger.VERBOSE;
+import static com.orhanobut.logger.Logger.WARN;
 
 /**
- * Helper util class to be used instead of Android methods to avoid direct dependency and enable
- * unit testing on Android projects.
+ * Provides convenient methods to some common operations
  */
-final class Helper {
+final class Utils {
 
-  private Helper() {
+  private Utils() {
     // Hidden constructor.
   }
 
@@ -36,7 +25,6 @@ final class Helper {
    * Returns true if the string is null or 0-length.
    *
    * @param str the string to be examined
-   *
    * @return true if str is null or zero length
    */
   static boolean isEmpty(CharSequence str) {
@@ -50,9 +38,8 @@ final class Helper {
    *
    * @param a first CharSequence to check
    * @param b second CharSequence to check
-   *
    * @return true if a and b are equal
-   *
+   * <p>
    * NOTE: Logic slightly change due to strict policy on CI -
    * "Inner assignments should be avoided"
    */
@@ -102,4 +89,59 @@ final class Helper {
     return sw.toString();
   }
 
+  static String logLevel(int value) {
+    switch (value) {
+      case VERBOSE:
+        return "VERBOSE";
+      case DEBUG:
+        return "DEBUG";
+      case INFO:
+        return "INFO";
+      case WARN:
+        return "WARN";
+      case ERROR:
+        return "ERROR";
+      case ASSERT:
+        return "ASSERT";
+      default:
+        return "UNKNOWN";
+    }
+  }
+
+  public static String toString(Object object) {
+    if (object == null) {
+      return "null";
+    }
+    if (!object.getClass().isArray()) {
+      return object.toString();
+    }
+    if (object instanceof boolean[]) {
+      return Arrays.toString((boolean[]) object);
+    }
+    if (object instanceof byte[]) {
+      return Arrays.toString((byte[]) object);
+    }
+    if (object instanceof char[]) {
+      return Arrays.toString((char[]) object);
+    }
+    if (object instanceof short[]) {
+      return Arrays.toString((short[]) object);
+    }
+    if (object instanceof int[]) {
+      return Arrays.toString((int[]) object);
+    }
+    if (object instanceof long[]) {
+      return Arrays.toString((long[]) object);
+    }
+    if (object instanceof float[]) {
+      return Arrays.toString((float[]) object);
+    }
+    if (object instanceof double[]) {
+      return Arrays.toString((double[]) object);
+    }
+    if (object instanceof Object[]) {
+      return Arrays.deepToString((Object[]) object);
+    }
+    return "Couldn't find a correct type for the object";
+  }
 }
